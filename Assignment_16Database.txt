@@ -1,0 +1,77 @@
+1)Ans:-Create a database. Create the following tables:
+2)Ans:-Insert values in the tables
+
+import pymysql as pm
+
+try:
+    con=pm.connect(host ='localhost',database='Library',user='root',password='root')
+    cursor= con.cursor()
+    query ='create table books(book id  int(5) primary key, T id int(4),location varchar(10),Genere varchar(10),foriegn key(T id))'
+    cursor.execute(query)
+    query1 ='create Titles(T id int(4) primary key,Title varchar(10),publish id int(5),pubic year int(5) foreign key(publish id)'
+    cursor.execute(query1)
+    query2 ='create Publishers(publish id int(5),Name varchar(10),Street add varchar(10),Zip id int(10) foreign key(Zip id))'
+    cursor.execute(query2)
+    query3 ='create Zipcode(ZipC id int(5),City varchar(10),Street add varchar(10),Zip id int(10))'
+    cursor.execute(query3)
+    query4 ='create Author Titles(Author id int(5),Title id int(5))'
+    cursor.execute(query4)
+    query5 = "insert into books(book id,T id,location ,Genere) values(%d,%d,%s,%s)"
+    records=[(101,78,'delhi','romantic'),
+                   (102, 68, 'mumbai', 'horror')]
+    cursor.executemany(query5,records)
+    query6 = "insert into Titles(T id,Title,publish id, pubic year) values(%d,%s,%d,%d)"
+    records1=[(102,'the fault in our stars',58,2011),
+                   (103, '2 states', 48,2012)]
+    cursor.executemany(query6,records1)
+    query7= "insert into Publishers(publish id ,Name, Street,Zip) values(%d,%s,%s%d)"
+    records2=[(103,'Sagar Publications','Vasant Vihar','201001'),
+              (105,'Artstic Publications','Gautam Vihar''201003')]
+    cursor.executemany(query7,records2)
+    query8="insert into Zipcode(ZipC id, City ,Street,Zip id) values (%d,%s,%s,%d)"
+    records3=[(104,'Ghaziabad','patel nagar','20107'),
+              (105,'Allahabad','Ghusi','20198')]
+    cursor.executemany(query8,records3)
+    query9="insert into Author Titles(Author id, Title id) values(%d,%d)"
+    records4=[(105,121),(106,122)]
+    cursor.executemany(query9,records4)
+    con.commit()
+except pm.Database as e:
+    if con:
+        con.rollback()
+        print('Somehow problem occured in your connection')
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+    print('task completed')
+# create n insert simuntaneously
+
+3)Ans:-{Update any values in any of the tables. Print the original and updated values.}
+
+import pymysql as pm
+try:
+    con = pm.connect(host='localhost', database='Library',user='root', password='root')
+    cursor = con.cursor()
+    query = "select * from Authors"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    for row in data:
+        print('AuthorID: {}, FirstName: {} MiddleName:{},LastName:{}'.format(row[0], row[1], row[2], row[3]))
+    query1 = "update Authors set FirstName='Rahul' "
+    cursor.execute(query1)
+    data1 = cursor.fetchall()
+    for row in data1:
+        print('AuthorID: {}, FirstName: {} MiddleName:{},LastName:{}'.format(row[0], row[1], row[2], row[3]))
+    con.commit()
+except pm.DatabaseError as e:
+    if con:
+        con.rollback()
+        print('Problem occured: ', e)
+finally:
+    if cursor:
+        cursor.close()
+    if con:
+        con.close()
+    print('DONE!!')
